@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 
 type LogData = {
   _time: string;
@@ -15,28 +15,33 @@ export function useNewlineDelimitedJsonStream(): {
   clearStream: () => void;
 } {
   const [entries, setEntries] = useState<LogEntry[]>([]);
-  const [partial, setPartial] = useState('');
+  const partialRef = useRef('');
   const decoder = useMemo(() => new TextDecoder(), []);
 
   function appendChunk(bytes: Uint8Array) {
-    let str = partial + decoder.decode(bytes);
+    let str = partialRef.current + decoder.decode(bytes);
     const chunk: LogEntry[] = [];
     let newlineIndex = str.indexOf('\n');
     while (newlineIndex > -1) {
-      const data = JSON.parse(str.substring(0, newlineIndex));
-      chunk.push({ id: globalThis.crypto.randomUUID(), data });
+      const line = str.substring(0, newlineIndex);
+      try {
+        const data = JSON.parse(line);
+        chunk.push({ id: globalThis.crypto.randomUUID(), data });
+      } catch {
+        console.warn(line);
+      }
       str = str.substring(newlineIndex + 1);
       newlineIndex = str.indexOf('\n');
     }
     if (chunk.length) {
       setEntries([...entries, ...chunk]);
     }
-    setPartial(str);
+    partialRef.current = str;
   }
 
   function clearStream() {
     setEntries([]);
-    setPartial('');
+    partialRef.current = '';
   }
 
   return { entries, appendChunk, clearStream };
