@@ -7,10 +7,12 @@ export default function App() {
   return (
     <div className="App">
       <h1>Hello CodeSandbox</h1>
-      <div>{isLoading ? 'loading...' : 'done!'}</div>
+      <div>
+        {isLoading ? 'loading...' : `loaded ${entries.length} log lines!`}
+      </div>
       {entries.map(({ id, data }) => (
-        <code>
-          <pre key={id}>{JSON.stringify(data)}</pre>
+        <code key={id}>
+          <pre>{JSON.stringify(data)}</pre>
         </code>
       ))}
     </div>
