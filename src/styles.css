@@ -2,3 +2,46 @@
   font-family: sans-serif;
   text-align: center;
 }
+
+.line {
+  display: flex;
+  line-height: 1.5rem;
+}
+.line:nth-child(2n) {
+  background: #f6f6f6;
+}
+header.line,
+header.line:nth-child(2n) {
+  background: #eee;
+  font-weight: bold;
+  text-align: left;
+}
+.line.expanded {
+  background: #ccc;
+  flex-wrap: wrap;
+}
+
+.line > .expand-toggle {
+  margin-right: 0.5rem;
+  width: 1.5rem;
+}
+
+.line > .time {
+  width: 14rem;
+}
+
+.line > .json {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+.line.expanded > .json {
+  background: #fff;
+  flex-basis: 100%;
+  white-space: pre;
+}
+.line.expanded:nth-child(2n) > .json {
+  background: #f6f6f6;
+}

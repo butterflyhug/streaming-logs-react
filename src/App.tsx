@@ -1,3 +1,4 @@
+import { LogLine } from './LogLine';
 import './styles.css';
 import { useLogStream } from './useLogStream';
 
@@ -6,14 +7,14 @@ export default function App() {
 
   return (
     <div className="App">
-      <h1>Hello CodeSandbox</h1>
-      <div>
-        {isLoading ? 'loading...' : `loaded ${entries.length} log lines!`}
-      </div>
-      {entries.map(({ id, data }) => (
-        <code key={id}>
-          <pre>{JSON.stringify(data)}</pre>
-        </code>
+      {isLoading && <div>loading...</div>}
+      <header className="line">
+        <div className="expand-toggle">&nbsp;</div>
+        <div className="time">Time</div>
+        <div className="json">Event</div>
+      </header>
+      {entries.map((line) => (
+        <LogLine line={line} key={line.id} />
       ))}
     </div>
   );
