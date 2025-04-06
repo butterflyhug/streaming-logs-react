@@ -26,7 +26,7 @@ export function useNewlineDelimitedJsonStream(): {
       const line = str.substring(0, newlineIndex);
       try {
         const data = JSON.parse(line);
-        chunk.push({ id: globalThis.crypto.randomUUID(), data });
+        chunk.push({ id: crypto.randomUUID(), data });
       } catch {
         console.warn(line);
       }
